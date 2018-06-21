@@ -38,10 +38,12 @@ namespace Mono.CSharp
 				this.underlyingType = underlyingType;
 			}
 
+#if !NET_2_0
 			public override Type GetEnumUnderlyingType ()
 			{
 				return underlyingType;
 			}
+#endif
 
 			public override Type UnderlyingSystemType {
 				get {
@@ -51,7 +53,7 @@ namespace Mono.CSharp
 		}
 #endif
 
-		class EnumTypeExpr : TypeExpr
+			class EnumTypeExpr : TypeExpr
 		{
 			public override TypeSpec ResolveAsType (IMemberContext ec, bool allowUnboundTypeArguments)
 			{

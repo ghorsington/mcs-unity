@@ -9,5 +9,6 @@
     <Import_RootNamespace>ikvm</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)reflect\" />
   </ItemGroup>
 </Project>

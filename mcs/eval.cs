@@ -425,7 +425,11 @@ namespace Mono.CSharp
 				};
 				host.SetBaseTypes (baseclass_list);
 
+#if !NET_2_0
 				var access = AssemblyBuilderAccess.RunAndCollect;
+#else
+				var access = AssemblyBuilderAccess.Run;
+#endif
 				var a = new AssemblyDefinitionDynamic (module, "completions");
 				a.Create (AppDomain.CurrentDomain, access);
 				module.SetDeclaringAssembly (a);
@@ -700,7 +704,11 @@ namespace Mono.CSharp
 				assembly = new AssemblyDefinitionDynamic (module, current_debug_name, current_debug_name);
 				assembly.Importer = importer;
 			} else {
+#if !NET_2_0
 				access = AssemblyBuilderAccess.RunAndCollect;
+#else
+				access = AssemblyBuilderAccess.Run;
+#endif
 				assembly = new AssemblyDefinitionDynamic (module, current_debug_name);
 			}
 
@@ -840,7 +848,7 @@ namespace Mono.CSharp
 			
 			return (CompiledMethod) System.Delegate.CreateDelegate (typeof (CompiledMethod), mi);
 #endif
-		}
+			}
 
 		/// <summary>
 		///   A sentinel value used to indicate that no value was

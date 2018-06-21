@@ -363,6 +363,7 @@ namespace Mono.CSharp {
 			return this;
 		}
 
+#if !NET_2_0
 		public override System.Linq.Expressions.Expression MakeExpression (BuilderContext ctx)
 		{
 			var tassign = target as IDynamicAssign;
@@ -390,6 +391,7 @@ namespace Mono.CSharp {
 
 			return System.Linq.Expressions.Expression.Assign (target_object, source_object);
 		}
+#endif
 
 		protected virtual Expression ResolveConversions (ResolveContext rc)
 		{

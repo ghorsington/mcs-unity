@@ -709,8 +709,10 @@ namespace Mono.CSharp
 				return is_checked ? SLE.Expression.NegateChecked (expr) : SLE.Expression.Negate (expr);
 			case Operator.LogicalNot:
 				return SLE.Expression.Not (expr);
-			case Operator.OnesComplement:
+#if !NET_2_0
+				case Operator.OnesComplement:
 				return SLE.Expression.OnesComplement (expr);
+#endif
 			default:
 				throw new NotImplementedException (Oper.ToString ());
 			}
@@ -1396,13 +1398,14 @@ namespace Mono.CSharp
 			get { return (mode & Mode.IsDecrement) != 0; }
 		}
 
-
+#if !NET_2_0
 		public override SLE.Expression MakeExpression (BuilderContext ctx)
 		{
 			var target = ((RuntimeValueExpression) expr).MetaObject.Expression;
 			var source = SLE.Expression.Convert (operation.MakeExpression (ctx), target.Type);
 			return SLE.Expression.Assign (target, source);
 		}
+#endif
 
 		public static string OperName (Mode oper)
 		{
@@ -2814,11 +2817,13 @@ namespace Mono.CSharp
 			temp_storage.Release (ec);
 		}
 
+#if !NET_2_0
 #if !STATIC
 		public override SLE.Expression MakeExpression (BuilderContext ctx)
 		{
 			return SLE.Expression.Default (type.GetMetaInfo ());
 		}
+#endif
 #endif
 
 		protected override void CloneTo (CloneContext clonectx, Expression t)
@@ -3354,7 +3359,7 @@ namespace Mono.CSharp
 			this.loc = loc;
 		}
 
-		#region Properties
+#region Properties
 
 		public bool IsCompound {
 			get {
@@ -3386,7 +3391,7 @@ namespace Mono.CSharp
 			}
 		}
 
-		#endregion
+#endregion
 
 		/// <summary>
 		///   Returns a stringified representation of the Operator
@@ -6318,7 +6323,7 @@ namespace Mono.CSharp
 			this.loc = loc;
 		}
 
-		#region Properties
+#region Properties
 
 		public Expression Expr {
 			get {
@@ -6338,7 +6343,7 @@ namespace Mono.CSharp
 			}
 		}
 
-		#endregion
+#endregion
 
 		public override bool ContainsEmitWithAwait ()
 		{
@@ -6543,7 +6548,7 @@ namespace Mono.CSharp
 	{
 		LocalTemporary temp;
 
-		#region Abstract
+#region Abstract
 		public abstract HoistedVariable GetHoistedVariable (AnonymousExpression ae);
 		public abstract void SetHasAddressTaken ();
 
@@ -6562,7 +6567,7 @@ namespace Mono.CSharp
 		// Variable flow-analysis data
 		//
 		public abstract VariableInfo VariableInfo { get; }
-		#endregion
+#endregion
 
 		public virtual void AddressOf (EmitContext ec, AddressOp mode)
 		{
@@ -6749,7 +6754,7 @@ namespace Mono.CSharp
 			return local_info.HoistedVariant;
 		}
 
-		#region Properties
+#region Properties
 
 		//		
 		// A local variable is always fixed
@@ -6777,7 +6782,7 @@ namespace Mono.CSharp
 			get { return local_info.Name; }
 		}
 
-		#endregion
+#endregion
 
 		public override void FlowAnalysis (FlowAnalysisContext fc)
 		{
@@ -6925,7 +6930,7 @@ namespace Mono.CSharp
 			this.loc = loc;
 		}
 
-		#region Properties
+#region Properties
 
 		public override bool IsLockedByStatement {
 			get {
@@ -6973,7 +6978,7 @@ namespace Mono.CSharp
 			get { return Parameter; }
 		}
 
-		#endregion
+#endregion
 
 		public override void AddressOf (EmitContext ec, AddressOp mode)
 		{
@@ -7121,7 +7126,7 @@ namespace Mono.CSharp
 			}
 		}
 
-		#region Properties
+#region Properties
 		public Arguments Arguments {
 			get {
 				return arguments;
@@ -7146,7 +7151,7 @@ namespace Mono.CSharp
 			}
 		}
 
-		#endregion
+#endregion
 
 		public override MethodGroupExpr CanReduceLambda (AnonymousMethodBody body)
 		{
@@ -7577,7 +7582,7 @@ namespace Mono.CSharp
 			loc = l;
 		}
 
-		#region Properties
+#region Properties
 		public Arguments Arguments {
 			get {
 				return arguments;
@@ -7599,7 +7604,7 @@ namespace Mono.CSharp
 			}
 		}
 
-		#endregion
+#endregion
 
 		/// <summary>
 		/// Converts complex core type syntax like 'new int ()' to simple constant
@@ -7973,7 +7978,7 @@ namespace Mono.CSharp
 		{
 		}
 
-		#region Properties
+#region Properties
 
 		public int Count {
 			get { return elements.Count; }
@@ -8000,7 +8005,7 @@ namespace Mono.CSharp
 			}
 		}
 
-		#endregion
+#endregion
 
 		public void Add (Expression expr)
 		{
@@ -8247,7 +8252,7 @@ namespace Mono.CSharp
 					} else {
 						only_constant_initializers = false;
 					}
-#endif					
+#endif
 					array_data.Add (element);
 				}
 			}
@@ -8577,7 +8582,7 @@ namespace Mono.CSharp
 
 			return data;
 		}
-
+#if !NET_2_0
 		public override SLE.Expression MakeExpression (BuilderContext ctx)
 		{
 #if STATIC
@@ -8594,6 +8599,7 @@ namespace Mono.CSharp
 			return SLE.Expression.NewArrayInit (array_element_type.GetMetaInfo (), initializers);
 #endif
 		}
+#endif
 #if STATIC
 		//
 		// Emits the initializers for the array
@@ -8963,7 +8969,7 @@ namespace Mono.CSharp
 			this.loc = loc;
 		}
 
-		#region Properties
+#region Properties
 
 		public override string Name {
 			get { return "this"; }
@@ -8999,7 +9005,7 @@ namespace Mono.CSharp
 			get { return false; }
 		}
 
-		#endregion
+#endregion
 
 		void CheckStructThisDefiniteAssignment (FlowAnalysisContext fc)
 		{
@@ -9447,7 +9453,7 @@ namespace Mono.CSharp
 			this.loc = loc;
 		}
 
-		#region Properties
+#region Properties
 
 		public override bool IsSideEffectFree {
 			get {
@@ -9467,7 +9473,7 @@ namespace Mono.CSharp
 			}
 		}
 
-		#endregion
+#endregion
 
 
 		protected override void CloneTo (CloneContext clonectx, Expression t)
@@ -10931,7 +10937,11 @@ namespace Mono.CSharp
 
 		public SLE.Expression MakeAssignExpression (BuilderContext ctx, Expression source)
 		{
+#if NET_2_0
+			throw new NotImplementedException();
+#else
 			return SLE.Expression.ArrayAccess (ea.Expr.MakeExpression (ctx), MakeExpressionArguments (ctx));
+#endif
 		}
 
 		public override SLE.Expression MakeExpression (BuilderContext ctx)
@@ -10975,7 +10985,7 @@ namespace Mono.CSharp
 			this.arguments = args;
 		}
 
-		#region Properties
+#region Properties
 
 		protected override Arguments Arguments {
 			get {
@@ -11014,7 +11024,7 @@ namespace Mono.CSharp
 			}
 		}
 
-		#endregion
+#endregion
 
 		public override bool ContainsEmitWithAwait ()
 		{
@@ -11124,9 +11134,13 @@ namespace Mono.CSharp
 #else
 			var value = new[] { source.MakeExpression (ctx) };
 			var args = Arguments.MakeExpression (arguments, ctx).Concat (value);
+#if NET_2_0
+			return args.First();
+#else
 			return SLE.Expression.Block (
 					SLE.Expression.Call (InstanceExpression.MakeExpression (ctx), (MethodInfo) Setter.GetMetaInfo (), args),
 					value [0]);
+#endif
 #endif
 		}
 
@@ -11211,7 +11225,7 @@ namespace Mono.CSharp
 			Error_TypeArgumentsCannotBeUsed (ec, "indexer", GetSignatureForError (), loc);
 		}
 
-		#region IBaseMembersProvider Members
+#region IBaseMembersProvider Members
 
 		IList<MemberSpec> OverloadResolver.IBaseMembersProvider.GetBaseMembers (TypeSpec type)
 		{
@@ -11241,7 +11255,7 @@ namespace Mono.CSharp
 			return null;
 		}
 
-		#endregion
+#endregion
 	}
 
 	//
@@ -11261,7 +11275,7 @@ namespace Mono.CSharp
 			eclass = ExprClass.Variable;
 		}
 
-		#region Properties
+#region Properties
 
 		public override string Name {
 			get {
@@ -11269,7 +11283,7 @@ namespace Mono.CSharp
 			}
 		}
 
-		#endregion
+#endregion
 
 		public override Expression CreateExpressionTree (ResolveContext ec)
 		{
@@ -11579,7 +11593,7 @@ namespace Mono.CSharp
 			this.Location = loc;
 		}
 
-		#region Properties
+#region Properties
 		public bool IsNullable {
 			get {
 				return Dimension == -1;
@@ -11594,7 +11608,7 @@ namespace Mono.CSharp
 
 		public ComposedTypeSpecifier Next { get; set; }
 
-		#endregion
+#endregion
 
 		public static ComposedTypeSpecifier CreateArrayDimension (int dimension, Location loc)
 		{
@@ -12486,14 +12500,14 @@ namespace Mono.CSharp
 				return (Expression) new_instance.instance;
 			}
 
-			#region IMemoryLocation Members
+#region IMemoryLocation Members
 
 			public void AddressOf (EmitContext ec, AddressOp mode)
 			{
 				new_instance.instance.AddressOf (ec, mode);
 			}
 
-			#endregion
+#endregion
 		}
 
 		CollectionOrObjectInitializers initializers;

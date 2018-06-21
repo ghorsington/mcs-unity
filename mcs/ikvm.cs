@@ -12,9 +12,11 @@
 
 using System;
 using System.Collections.Generic;
+#if STATIC
 using MetaType = IKVM.Reflection.Type;
 using IKVM.Reflection;
 using IKVM.Reflection.Emit;
+#endif
 using System.IO;
 using System.Configuration.Assemblies;
 

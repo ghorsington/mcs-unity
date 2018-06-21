@@ -12,7 +12,9 @@
 using System;
 using System.Linq;
 using SLE = System.Linq.Expressions;
+#if !NET_2_0
 using System.Dynamic;
+#endif
 #if STATIC
 using IKVM.Reflection.Emit;
 #else
@@ -58,7 +60,7 @@ namespace Mono.CSharp
 		}
 	}
 
-	#region Dynamic runtime binder expressions
+#region Dynamic runtime binder expressions
 
 	//
 	// Expression created from runtime dynamic object value by dynamic binder
@@ -66,6 +68,14 @@ namespace Mono.CSharp
 	public class RuntimeValueExpression : Expression, IDynamicAssign, IMemoryLocation
 	{
 
+#if NET_2_0
+		public class DynamicMetaObject
+		{
+			public TypeSpec RuntimeType;
+			public TypeSpec LimitType;
+			public SLE.Expression Expression;
+		}
+#endif
 		readonly DynamicMetaObject obj;
 
 		public RuntimeValueExpression (DynamicMetaObject obj, TypeSpec type)
@@ -75,7 +85,7 @@ namespace Mono.CSharp
 			this.eclass = ExprClass.Variable;
 		}
 
-		#region Properties
+#region Properties
 
 		public bool IsSuggestionOnly { get; set; }
 
@@ -83,7 +93,7 @@ namespace Mono.CSharp
 			get { return obj; }
 		}
 
-		#endregion
+#endregion
 
 		public void AddressOf (EmitContext ec, AddressOp mode)
 		{
@@ -115,7 +125,7 @@ namespace Mono.CSharp
 			throw new NotImplementedException ();
 		}
 
-		#region IAssignMethod Members
+#region IAssignMethod Members
 
 		public void Emit (EmitContext ec, bool leave_copy)
 		{
@@ -127,7 +137,7 @@ namespace Mono.CSharp
 			throw new NotImplementedException ();
 		}
 
-		#endregion
+#endregion
 
 		public SLE.Expression MakeAssignExpression (BuilderContext ctx, Expression source)
 		{
@@ -139,16 +149,18 @@ namespace Mono.CSharp
 #if STATIC
 			return base.MakeExpression (ctx);
 #else
+#if !NET_2_0
 
-				if (type.IsStruct && !obj.Expression.Type.IsValueType)
+			if (type.IsStruct && !obj.Expression.Type.IsValueType)
 					return SLE.Expression.Unbox (obj.Expression, type.GetMetaInfo ());
 
 				if (obj.Expression.NodeType == SLE.ExpressionType.Parameter) {
 					if (((SLE.ParameterExpression) obj.Expression).IsByRef)
 						return obj.Expression;
 				}
-
+#else
 				return SLE.Expression.Convert (obj.Expression, type.GetMetaInfo ());
+#endif
 #endif
 		}
 	}
@@ -173,6 +185,7 @@ namespace Mono.CSharp
 			return this;
 		}
 
+#if !NET_2_0
 		public override SLE.Expression MakeExpression (BuilderContext ctx)
 		{
 #if STATIC
@@ -181,9 +194,10 @@ namespace Mono.CSharp
 			return SLE.Expression.Block (expr.MakeExpression (ctx), SLE.Expression.Default (type.GetMetaInfo ()));
 #endif
 		}
+#endif
 	}
 
-	#endregion
+#endregion
 
 	//
 	// Creates dynamic binder expression
@@ -1046,7 +1060,7 @@ namespace Mono.CSharp
 				base.EmitStatement (ec);
 		}
 
-		#region IAssignMethod Members
+#region IAssignMethod Members
 
 		public void Emit (EmitContext ec, bool leave_copy)
 		{
@@ -1058,7 +1072,7 @@ namespace Mono.CSharp
 			EmitCall (ec, setter, setter_args, !leave_copy);
 		}
 
-		#endregion
+#endregion
 	}
 
 	class DynamicUnaryConversion : DynamicExpressionStatement, IDynamicBinder

@@ -773,7 +773,7 @@ namespace Mono.CSharp
 					return;
 				}
 
-				foreach (var l in File.ReadLines (fileName)) {
+				foreach (var l in File.ReadAllLines (fileName)) {
 					if (GetResourceStrings == null)
 						GetResourceStrings = new Dictionary<string, string> ();
 

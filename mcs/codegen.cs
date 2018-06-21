@@ -261,8 +261,9 @@ namespace Mono.CSharp
 			var sf = loc.SourceFile;
 			if (sf.IsHiddenLocation (loc))
 				return false;
-
+#if !NET_2_0
 			methodSymbols.MarkSequencePoint (ig.ILOffset, sf.SourceFileEntry, loc.Row, loc.Column, false);
+#endif
 			return true;
 		}
 
@@ -321,16 +322,18 @@ namespace Mono.CSharp
 		{
 			if ((flags & Options.OmitDebugInfo) != 0)
 				return;
-
+#if !NET_2_0
 			methodSymbols.StartBlock (CodeBlockEntry.Type.Lexical, ig.ILOffset, scopeIndex);
+#endif
 		}
 
 		public void BeginCompilerScope (int scopeIndex)
 		{
 			if ((flags & Options.OmitDebugInfo) != 0)
 				return;
-
+#if !NET_2_0
 			methodSymbols.StartBlock (CodeBlockEntry.Type.CompilerGenerated, ig.ILOffset, scopeIndex);
+#endif
 		}
 
 		public void EndExceptionBlock ()
@@ -342,8 +345,9 @@ namespace Mono.CSharp
 		{
 			if ((flags & Options.OmitDebugInfo) != 0)
 				return;
-
+#if !NET_2_0
 			methodSymbols.EndBlock (ig.ILOffset);
+#endif
 		}
 
 		public void CloseConditionalAccess (TypeSpec type)
