@@ -43,7 +43,7 @@ namespace Mono.CSharp
 		}
 	}
 #else
-	public sealed class ReflectionImporter : MetadataImporter
+	public class ReflectionImporter : MetadataImporter
 	{
 		public ReflectionImporter (ModuleContainer module, BuiltinTypes builtin)
 			: base (module)
@@ -392,9 +392,9 @@ namespace Mono.CSharp
 	//
 	// Reflection based references loader
 	//
-	class DynamicLoader : AssemblyReferencesLoader<Assembly>
+	public class DynamicLoader : AssemblyReferencesLoader<Assembly>
 	{
-		readonly ReflectionImporter importer;
+		public ReflectionImporter importer;
 
 		public DynamicLoader (ReflectionImporter importer, CompilerContext compiler)
 			: base (compiler)
@@ -410,7 +410,7 @@ namespace Mono.CSharp
 			}
 		}
 
-		protected override string[] GetDefaultReferences ()
+		public override string[] GetDefaultReferences ()
 		{
 			//
 			// For now the "default config" is harcoded into the compiler

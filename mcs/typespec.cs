@@ -756,9 +756,9 @@ namespace Mono.CSharp
 			}
 
 			if (!inflated_instances.TryGetValue (targs, out instance)) {
-				if (GetDefinition () != this && !IsNested)
-					throw new InternalErrorException ("`{0}' must be type definition or nested non-inflated type to MakeGenericType",
-						GetSignatureForError ());
+				if (GetDefinition() != this && !IsNested)
+					throw new InternalErrorException("`{0}' must be type definition or nested non-inflated type to MakeGenericType => " + Environment.StackTrace,
+						GetSignatureForError());
 
 				instance = new InflatedTypeSpec (context, this, declaringType, targs);
 				inflated_instances.Add (targs, instance);

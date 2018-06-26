@@ -430,6 +430,8 @@ namespace Mono.CSharp
 		void CheckReferencesPublicToken ()
 		{
 			var references = builder_extra.GetReferencedAssemblies ();
+			if (references == null)
+				return;
 			foreach (var an in references) {
 				if (public_key != null && an.GetPublicKey ().Length == 0) {
 					Report.Error (1577, "Referenced assembly `{0}' does not have a strong name",
@@ -1201,13 +1203,13 @@ namespace Mono.CSharp
 		}
 	}
 
-	abstract class AssemblyReferencesLoader<T> where T : class
+	public abstract class AssemblyReferencesLoader<T> where T : class
 	{
-		protected readonly CompilerContext compiler;
+		public readonly CompilerContext compiler;
 
-		protected readonly List<string> paths;
+		public readonly List<string> paths;
 
-		protected AssemblyReferencesLoader (CompilerContext compiler)
+		public AssemblyReferencesLoader (CompilerContext compiler)
 		{
 			this.compiler = compiler;
 
@@ -1217,7 +1219,7 @@ namespace Mono.CSharp
 		}
 
 		public abstract T HasObjectType (T assembly);
-		protected abstract string[] GetDefaultReferences ();
+		public abstract string[] GetDefaultReferences ();
 		public abstract T LoadAssemblyFile (string fileName, bool isImplicitReference);
 		public abstract void LoadReferences (ModuleContainer module);
 
@@ -1245,7 +1247,7 @@ namespace Mono.CSharp
 				fileName);
 		}
 
-		protected void LoadReferencesCore (ModuleContainer module, out T corlib_assembly, out List<Tuple<RootNamespace, T>> loaded)
+		public void LoadReferencesCore (ModuleContainer module, out T corlib_assembly, out List<Tuple<RootNamespace, T>> loaded)
 		{
 			compiler.TimeReporter.Start (TimeReporter.TimerType.ReferencesLoading);
 

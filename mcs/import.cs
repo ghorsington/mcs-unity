@@ -1,4 +1,4 @@
-//
+﻿//
 // import.cs: System.Reflection conversions
 //
 // Authors: Marek Safar (marek.safar@gmail.com)
@@ -1170,7 +1170,15 @@ namespace Mono.CSharp
 				if (t.Name[0] == '<')
 					continue;
 
-				var it = CreateType (t, null, new AttributesTypeInfoReader (t), true);
+				TypeSpec it;
+				try
+				{
+					it = CreateType(t, null, new AttributesTypeInfoReader(t), true);
+				} catch
+				{
+					continue;
+				}
+
 				if (it == null)
 					continue;
 

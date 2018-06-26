@@ -66,10 +66,10 @@ namespace Mono.CSharp
 #endif
 		static Thread invoke_thread;
 
-		readonly Dictionary<string, Tuple<FieldSpec, FieldInfo>> fields;
+		public Dictionary<string, Tuple<FieldSpec, FieldInfo>> fields;
 
-		Type base_class;
-		bool inited;
+		public Type base_class;
+		public bool inited;
 		int startup_files;
 
 		readonly CompilerContext ctx;
