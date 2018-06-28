@@ -445,6 +445,7 @@ namespace Mono.CSharp
 				try {
 					method.Block.Resolve (bc, method);
 				} catch (CompletionResult cr) {
+					//Console.WriteLine("got completion from " + cr.StackTrace);
 					prefix = cr.BaseText;
 					return cr.Result;
 				} 
