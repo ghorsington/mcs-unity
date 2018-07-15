@@ -3031,7 +3031,7 @@ namespace Mono.CSharp {
 
 				if (rc.Module.Evaluator != null) {
 					var fi = rc.Module.Evaluator.LookupField (Name);
-					if (!fi.Equals(new Tuple<FieldSpec, FieldInfo>()))
+					if (fi != null)
 						return new FieldExpr (fi.Item1, loc);
 				}
 

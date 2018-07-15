@@ -820,6 +820,7 @@ namespace Mono.CSharp
 			// or reflection gets confused (it basically gets confused, and variables override each
 			// other).
 			//
+#if false
 			foreach (var member in host.Members) {
 				var field = member as Field;
 				if (field == null)
@@ -846,10 +847,11 @@ namespace Mono.CSharp
 
 				fields[field.Name] = Tuple.Create (field.Spec, fi);
 			}
+#endif
 			
 			return (CompiledMethod) System.Delegate.CreateDelegate (typeof (CompiledMethod), mi);
 #endif
-			}
+		}
 
 		/// <summary>
 		///   A sentinel value used to indicate that no value was
