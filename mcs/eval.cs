@@ -69,6 +69,7 @@ namespace Mono.CSharp
 		public Dictionary<string, Tuple<FieldSpec, FieldInfo>> fields;
 
 		public Type base_class;
+		public Type prev_host;
 		public bool inited;
 		int startup_files;
 
@@ -175,6 +176,7 @@ namespace Mono.CSharp
 			}
 			set {
 				base_class = value;
+				prev_host = null;
 
 				if (value != null && typeof (InteractiveBase).IsAssignableFrom (value))
 					InteractiveBase.Evaluator = this;
@@ -419,8 +421,8 @@ namespace Mono.CSharp
 
 				Class host = parser.InteractiveResult;
 
-				var base_class_imported = importer.ImportType (base_class);
-				var baseclass_list = new List<FullNamedExpression> (1) {
+				var base_class_imported = importer.ImportType (prev_host ?? base_class);
+				var baseclass_list = new List<FullNamedExpression> () {
 					new TypeExpression (base_class_imported, host.Location)
 				};
 				host.SetBaseTypes (baseclass_list);
@@ -717,7 +719,7 @@ namespace Mono.CSharp
 
 			Method expression_method;
 			if (host != null) {
-				var base_class_imported = importer.ImportType (base_class);
+				var base_class_imported = importer.ImportType (prev_host ?? base_class);
 				var baseclass_list = new List<FullNamedExpression> (1) {
 					new TypeExpression (base_class_imported, host.Location)
 				};
@@ -797,7 +799,7 @@ namespace Mono.CSharp
 				return null;
 			}
 
-			module.CloseContainerEarlyForReflectionEmit ();
+			module.CloseContainerEarlyForReflectionEmit();
 			module.CloseContainer ();
 			if (host != null)
 				host.CloseContainer ();
@@ -813,6 +815,7 @@ namespace Mono.CSharp
 			// work from MethodBuilders.   Retarded, I know.
 			//
 			var tt = assembly.Builder.GetType (host.TypeBuilder.Name);
+			prev_host = tt;
 			var mi = tt.GetMethod (expression_method.MemberName.Name);
 
 			//
@@ -820,7 +823,7 @@ namespace Mono.CSharp
 			// or reflection gets confused (it basically gets confused, and variables override each
 			// other).
 			//
-#if false
+
 			foreach (var member in host.Members) {
 				var field = member as Field;
 				if (field == null)
@@ -844,10 +847,9 @@ namespace Mono.CSharp
 						}
 					}
 				}
-
+				Console.WriteLine("replacing fieldspec for " + field.Name);
 				fields[field.Name] = Tuple.Create (field.Spec, fi);
 			}
-#endif
 			
 			return (CompiledMethod) System.Delegate.CreateDelegate (typeof (CompiledMethod), mi);
 #endif
@@ -1179,8 +1181,9 @@ namespace Mono.CSharp
 
 	class InteractiveMethod : Method
 	{
+		public static int host_counter;
 		public InteractiveMethod(TypeDefinition parent, FullNamedExpression returnType, Modifiers mod, ParametersCompiled parameters)
-			: base(parent, returnType, mod, new MemberName("Host"), parameters, null)
+			: base(parent, returnType, mod, new MemberName("Host" + host_counter++), parameters, null)
 		{
 		}
 

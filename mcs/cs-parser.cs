@@ -126,6 +126,7 @@ namespace Mono.CSharp
 		bool? interactive_async;
 		
 		Stack<Linq.QueryBlock> linq_clause_blocks;
+		static int class_count;
 
 		ModuleContainer module;
 		
@@ -10893,7 +10894,7 @@ void case_1122()
 void case_1125()
 #line 7665 "cs-parser.jay"
 { 
-		current_container = current_type = new Class (current_container, new MemberName ("<InteractiveExpressionClass>"), Modifiers.PUBLIC, null);
+		current_container = current_type = new Class (current_container, new MemberName ("<InteractiveExpressionClass "+ class_count++ +">"), Modifiers.PUBLIC, null);
 
 		/* (ref object retval)*/
 		Parameter [] mpar = new Parameter [1];

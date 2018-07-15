@@ -134,7 +134,7 @@ namespace Mono.CSharp {
 		/// </summary>
 		public void SymbolRelatedToPreviousError (Location loc, string symbol)
 		{
-			SymbolRelatedToPreviousError (loc.ToString ());
+			SymbolRelatedToPreviousError(loc.ToString());
 		}
 
 		public void SymbolRelatedToPreviousError (MemberSpec ms)
@@ -556,7 +556,7 @@ namespace Mono.CSharp {
 		// When (symbols related to previous ...) can be used
 		//
 		public virtual bool HasRelatedSymbolSupport {
-			get { return true; }
+			get { return false; }
 		}
 
 		#endregion
