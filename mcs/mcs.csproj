@@ -11,6 +11,7 @@
     <AssemblyName>mcs</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,15 +49,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.Security">
-      <HintPath>..\lib\Mono.Security.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="anonymous.cs" />
@@ -75,6 +71,7 @@
     <Compile Include="constant.cs" />
     <Compile Include="context.cs" />
     <Compile Include="convert.cs" />
+    <Compile Include="crypto.cs" />
     <Compile Include="cs-parser.cs" />
     <Compile Include="cs-tokenizer.cs" />
     <Compile Include="decl.cs" />
@@ -119,11 +116,8 @@
     <Compile Include="tuples.cs" />
     <Compile Include="typemanager.cs" />
     <Compile Include="typespec.cs" />
+    <Compile Include="Visibility\skip-visibility.cs" />
     <Compile Include="visit.cs" />
   </ItemGroup>
-  <Import Project="..\ikvm\ikvm.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) c:\users\ez\patchwork\managed\mcs.dll</PostBuildEvent>
-  </PropertyGroup>
 </Project>

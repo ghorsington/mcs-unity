@@ -404,11 +404,6 @@ namespace Mono.CSharp
 			if (Report.Errors > 0)
 				return false;
 
-			if (settings.DocumentationFile != null) {
-				var doc = new DocumentationBuilder (module);
-				doc.OutputDocComment (output_file, settings.DocumentationFile);
-			}
-
 			assembly.Resolve ();
 			
 			if (Report.Errors > 0)

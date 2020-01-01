@@ -230,6 +230,8 @@ namespace Mono.CSharp
 			Builder = file_name == null ?
 				domain.DefineDynamicAssembly (an, access) :
 				domain.DefineDynamicAssembly (an, access, Dirname (file_name));
+			
+			Builder.MarkCorlibInternal();
 
 			module.Create (this, CreateModuleBuilder ());
 			builder_extra = new AssemblyBuilderMonoSpecific (Builder, Compiler);

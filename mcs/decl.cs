@@ -834,30 +834,6 @@ namespace Mono.CSharp {
 			Parent.GetCompletionStartingWith (prefix, results);
 		}
 
-		//
-		// Generates xml doc comments (if any), and if required,
-		// handle warning report.
-		//
-		internal virtual void GenerateDocComment (DocumentationBuilder builder)
-		{
-			if (DocComment == null) {
-				if (IsExposedFromAssembly ()) {
-					Constructor c = this as Constructor;
-					if (c == null || !c.IsDefault ())
-						Report.Warning (1591, 4, Location,
-							"Missing XML comment for publicly visible type or member `{0}'", GetSignatureForError ());
-				}
-
-				return;
-			}
-
-			try {
-				builder.GenerateDocumentationForMember (this);
-			} catch (Exception e) {
-				throw new InternalErrorException (this, e);
-			}
-		}
-
 		public virtual void WriteDebugSymbol (MonoSymbolFile file)
 		{
 		}
@@ -1173,6 +1149,7 @@ namespace Mono.CSharp {
 		//
 		public bool IsAccessible (IMemberContext ctx)
 		{
+			return true;
 			var ma = Modifiers & Modifiers.AccessibilityMask;
 			if (ma == Modifiers.PUBLIC)
 				return true;

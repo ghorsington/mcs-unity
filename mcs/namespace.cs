@@ -1359,14 +1359,6 @@ namespace Mono.CSharp {
 			namespace_using_table = null;
 		}
 
-		internal override void GenerateDocComment (DocumentationBuilder builder)
-		{
-			if (containers != null) {
-				foreach (var tc in containers)
-					tc.GenerateDocComment (builder);
-			}
-		}
-
 		public override string GetSignatureForError ()
 		{
 			return MemberName == null ? "global::" : base.GetSignatureForError ();

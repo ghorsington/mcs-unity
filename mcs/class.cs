@@ -1109,17 +1109,6 @@ namespace Mono.CSharp
 			get { return pending; }
 		}
 
-		internal override void GenerateDocComment (DocumentationBuilder builder)
-		{
-			if (IsPartialPart)
-				return;
-
-			base.GenerateDocComment (builder);
-
-			foreach (var member in members)
-				member.GenerateDocComment (builder);
-		}
-
 		public TypeSpec GetAsyncMethodBuilder ()
 		{
 			if (OptAttributes == null)

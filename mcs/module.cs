@@ -18,7 +18,6 @@ using Mono.CompilerServices.SymbolWriter;
 using System.Linq;
 using System.IO;
 using System.Security.Cryptography;
-using Mono.Security.Cryptography;
 
 #if STATIC
 using IKVM.Reflection;
@@ -629,12 +628,6 @@ namespace Mono.CSharp
 					foreach (var at in atypes.Value)
 						at.EmitContainer ();
 			}
-		}
-
-		internal override void GenerateDocComment (DocumentationBuilder builder)
-		{
-			foreach (var tc in containers)
-				tc.GenerateDocComment (builder);
 		}
 
 		public AnonymousTypeClass GetAnonymousType (IList<AnonymousTypeParameter> parameters)
