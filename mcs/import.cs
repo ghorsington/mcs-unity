@@ -2197,6 +2197,7 @@ namespace Mono.CSharp
 
 		bool ITypeDefinition.IsInternalAsPublic (IAssemblyDefinition assembly)
 		{
+			// return true;
 			var a = importer.GetAssemblyDefinition (provider.Module.Assembly);
 			return a == assembly || a.IsFriendAssemblyTo (assembly);
 		}

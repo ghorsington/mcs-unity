@@ -436,7 +436,7 @@ namespace Mono.CSharp {
 			// a constant, field, property, local variable, or parameter with the same type as the meaning of E as a type-name
 
 			if (left is MemberExpr || left is VariableReference) {
-				var identical_type = rc.LookupNamespaceOrType (name.Name, 0, LookupMode.Probing, loc) as TypeExpr;
+				var identical_type = rc.LookupNamespaceOrType (name.Name, 0, LookupMode.IgnoreAccessibility, loc) as TypeExpr;
 				if (identical_type != null && identical_type.Type == left.Type)
 					return identical_type;
 			}
@@ -2736,7 +2736,7 @@ namespace Mono.CSharp {
 				return;
 			}
 
-			retval = ctx.LookupNamespaceOrType (Name, -System.Math.Max (1, Arity), LookupMode.Probing, loc);
+			retval = ctx.LookupNamespaceOrType (Name, -System.Math.Max (1, Arity), LookupMode.IgnoreAccessibility, loc);
 			if (retval != null) {
 				Error_TypeArgumentsCannotBeUsed (ctx, retval.Type, loc);
 				return;
@@ -2763,7 +2763,7 @@ namespace Mono.CSharp {
 
 		public override FullNamedExpression ResolveAsTypeOrNamespace (IMemberContext mc, bool allowUnboundTypeArguments)
 		{
-			FullNamedExpression fne = mc.LookupNamespaceOrType (Name, Arity, LookupMode.Normal, loc);
+			FullNamedExpression fne = mc.LookupNamespaceOrType (Name, Arity, LookupMode.IgnoreAccessibility, loc);
 
 			if (fne != null) {
 				if (fne.Type != null && Arity > 0) {
@@ -2811,12 +2811,12 @@ namespace Mono.CSharp {
 			// Has to ignore static usings because we are looking for any member not just type
 			// in this context
 			//
-			return mc.LookupNamespaceOrType (Name, Arity, LookupMode.Probing | LookupMode.IgnoreStaticUsing, loc) != null;
+			return mc.LookupNamespaceOrType (Name, Arity, LookupMode.IgnoreAccessibility | LookupMode.IgnoreStaticUsing, loc) != null;
 		}
 
 		public bool IsPossibleType (IMemberContext mc)
 		{
-			return mc.LookupNamespaceOrType (Name, Arity, LookupMode.Probing, loc) is TypeExpr;
+			return mc.LookupNamespaceOrType (Name, Arity, LookupMode.IgnoreAccessibility, loc) is TypeExpr;
 		}
 
 		public override Expression LookupNameExpression (ResolveContext rc, MemberLookupRestrictions restrictions)
@@ -3007,7 +3007,7 @@ namespace Mono.CSharp {
 							}
 						}
 
-						e = rc.LookupNamespaceOrType (Name, -System.Math.Max (1, Arity), LookupMode.Probing, loc);
+						e = rc.LookupNamespaceOrType (Name, -System.Math.Max (1, Arity), LookupMode.IgnoreAccessibility, loc);
 						if (e != null) {
 							if (e.Type.Arity != Arity && (restrictions & MemberLookupRestrictions.IgnoreArity) == 0) {
 								Error_TypeArgumentsCannotBeUsed (rc, e.Type, loc);
@@ -3230,7 +3230,7 @@ namespace Mono.CSharp {
 				return;
 			}
 
-			retval = Namespace.LookupType (ctx, name, -System.Math.Max (1, arity), LookupMode.Probing, loc);
+			retval = Namespace.LookupType (ctx, name, -System.Math.Max (1, arity), LookupMode.IgnoreAccessibility, loc);
 			if (retval != null) {
 				Error_TypeArgumentsCannotBeUsed (ctx, retval, loc);
 				return;

@@ -50,7 +50,7 @@ namespace Mono.CSharp {
 			List<string> res = null;
 
 			foreach (var ns in all_namespaces) {
-				var type = ns.Value.LookupType (ctx, name, arity, LookupMode.Normal, Location.Null);
+				var type = ns.Value.LookupType (ctx, name, arity, LookupMode.IgnoreAccessibility, Location.Null);
 				if (type != null) {
 					if (res == null)
 						res = new List<string> ();
@@ -243,7 +243,7 @@ namespace Mono.CSharp {
 
 			TypeSpec best = null;
 			if (arity == 0 && cached_types.TryGetValue (name, out best)) {
-				if (best != null || mode != LookupMode.IgnoreAccessibility)
+				if (best != null || (mode & LookupMode.IgnoreAccessibility) == 0)
 					return best;
 			}
 
@@ -254,7 +254,7 @@ namespace Mono.CSharp {
 			foreach (var ts in found) {
 				if (ts.Arity == arity) {
 					if (best == null) {
-						if ((ts.Modifiers & Modifiers.INTERNAL) != 0 && !ts.MemberDefinition.IsInternalAsPublic (ctx.Module.DeclaringAssembly) && mode != LookupMode.IgnoreAccessibility)
+						if ((ts.Modifiers & Modifiers.INTERNAL) != 0 && !ts.MemberDefinition.IsInternalAsPublic (ctx.Module.DeclaringAssembly) && (mode & LookupMode.IgnoreAccessibility) == 0)
 							continue;
 
 						best = ts;
@@ -803,7 +803,7 @@ namespace Mono.CSharp {
 
 		public override void AddPartial (TypeDefinition next_part)
 		{
-			var existing = ns.LookupType (this, next_part.MemberName.Name, next_part.MemberName.Arity, LookupMode.Probing, Location.Null);
+			var existing = ns.LookupType (this, next_part.MemberName.Name, next_part.MemberName.Arity, LookupMode.IgnoreAccessibility, Location.Null);
 			var td = existing != null ? existing.MemberDefinition as TypeDefinition : null;
 			AddPartial (next_part, td);
 		}

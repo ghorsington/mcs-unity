@@ -2495,6 +2495,7 @@ namespace Mono.CSharp
 
 		bool ITypeDefinition.IsInternalAsPublic (IAssemblyDefinition assembly)
 		{
+			// return true;
 			return Module.DeclaringAssembly == assembly;
 		}
 
@@ -2532,13 +2533,13 @@ namespace Mono.CSharp
 
 			if (e == null) {
 				TypeSpec t = LookupNestedTypeInHierarchy (name, arity);
-
+				
 				if (t != null && (t.IsAccessible (this) || mode == LookupMode.IgnoreAccessibility))
 					e = new TypeExpression (t, Location.Null);
 				else {
 					var errors = Compiler.Report.Errors;
 					e = Parent.LookupNamespaceOrType (name, arity, mode, loc);
-
+					
 					// TODO: LookupNamespaceOrType does more than just lookup. The result
 					// cannot be cached or the error reporting won't happen
 					if (errors != Compiler.Report.Errors)

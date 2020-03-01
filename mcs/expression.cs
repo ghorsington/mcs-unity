@@ -10018,7 +10018,7 @@ namespace Mono.CSharp
 
 			var ns = expr as NamespaceExpression;
 			if (ns != null) {
-				var retval = ns.LookupTypeOrNamespace (rc, Name, Arity, LookupMode.Normal, loc);
+				var retval = ns.LookupTypeOrNamespace (rc, Name, Arity, LookupMode.IgnoreAccessibility, loc);
 
 				if (retval == null) {
 					ns.Error_NamespaceDoesNotExist (rc, Name, Arity, loc);
@@ -10187,7 +10187,7 @@ namespace Mono.CSharp
 
 			var ns = expr_resolved as NamespaceExpression;
 			if (ns != null) {
-				FullNamedExpression retval = ns.LookupTypeOrNamespace (rc, Name, Arity, LookupMode.Normal, loc);
+				FullNamedExpression retval = ns.LookupTypeOrNamespace (rc, Name, Arity, LookupMode.IgnoreAccessibility, loc);
 
 				if (retval == null) {
 					ns.Error_NamespaceDoesNotExist (rc, Name, Arity, loc);

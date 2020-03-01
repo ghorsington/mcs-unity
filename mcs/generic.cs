@@ -725,6 +725,7 @@ namespace Mono.CSharp {
 
 		bool ITypeDefinition.IsInternalAsPublic (IAssemblyDefinition assembly)
 		{
+			// return true;
 			return spec.MemberDefinition.DeclaringAssembly == assembly;
 		}
 

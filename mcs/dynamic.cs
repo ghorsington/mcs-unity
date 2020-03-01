@@ -457,7 +457,7 @@ namespace Mono.CSharp
 				TypeSpec te = null;
 				Namespace type_ns = module.GlobalRootNamespace.GetNamespace ("System", true);
 				if (type_ns != null) {
-					te = type_ns.LookupType (module, d_name, dyn_args_count + default_args, LookupMode.Normal, loc);
+					te = type_ns.LookupType (module, d_name, dyn_args_count + default_args, LookupMode.IgnoreAccessibility, loc);
 				}
 
 				if (te != null) {
