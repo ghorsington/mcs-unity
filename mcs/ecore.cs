@@ -3474,18 +3474,6 @@ namespace Mono.CSharp {
 
 		public static bool CheckProtectedMemberAccess<T> (ResolveContext rc, T member, TypeSpec qualifier) where T : MemberSpec
 		{
-			var ct = rc.CurrentType;
-			if (ct == qualifier)
-				return true;
-
-			if ((member.Modifiers & Modifiers.INTERNAL) != 0 && member.DeclaringType.MemberDefinition.IsInternalAsPublic (ct.MemberDefinition.DeclaringAssembly))
-				return true;
-
-			qualifier = qualifier.GetDefinition ();
-			if (ct != qualifier && !IsSameOrBaseQualifier (ct, qualifier)) {
-				return false;
-			}
-
 			return true;
 		}
 
